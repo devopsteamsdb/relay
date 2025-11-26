@@ -367,8 +367,12 @@ DevOps Tool Provisioning for Airgapped Environments
             self.show_tool_selection_menu(action=action)
             selection = input().strip().lower()
 
-            if selection == 'b' or selection == 'q':
+            if selection == 'b':
                 break
+            
+            if selection == 'q':
+                print(f"{Fore.CYAN}Exiting Relay. Goodbye!{Style.RESET_ALL}")
+                sys.exit(0)
             
             if selection == 'a':
                 # Select all tools
