@@ -5,12 +5,23 @@ import json
 import argparse
 import urllib.request
 import urllib.error
+from tqdm import tqdm
 
 def download_file(url, dest_path):
     try:
         print(f"Downloading {url} to {dest_path}...")
         with urllib.request.urlopen(url) as response, open(dest_path, 'wb') as out_file:
-            out_file.write(response.read())
+            total_size = int(response.info().get('Content-Length', 0))
+            block_size = 1024 # 1 Kibibyte
+            
+            with tqdm(total=total_size, unit='iB', unit_scale=True, desc=os.path.basename(dest_path)) as t:
+                while True:
+                    data = response.read(block_size)
+                    if not data:
+                        break
+                    t.update(len(data))
+                    out_file.write(data)
+                    
         print(f"Successfully downloaded to {dest_path}")
         return True
     except urllib.error.URLError as e:
