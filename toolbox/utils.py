@@ -79,7 +79,12 @@ def get_system_info():
             pass # Fallback to platform.version() if file not found
 
     python_version = sys.version.split(' ')[0]
-    user = os.getenv('SUDO_USER') or os.getlogin() # Get original user if running with sudo
+    try:
+        user = os.getenv('SUDO_USER') or os.getlogin()
+    except OSError:
+        # os.getlogin() fails in Docker containers without a controlling terminal
+        user = os.getenv('USER') or os.getenv('USERNAME') or 'unknown'
+    
     
     try:
         is_root = os.geteuid() == 0
