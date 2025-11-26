@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "python3 -m pip download ansible --dest \"{download_dir}\""
+            "command": "venv/bin/python3 -m pip download ansible --dest \"{download_dir}\""
         }
     ],
     "install_steps": [
