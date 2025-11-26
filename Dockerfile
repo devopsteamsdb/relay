@@ -2,7 +2,7 @@ FROM registry.access.redhat.com/ubi8/ubi
 
 # Install python3.9 and other necessary tools
 # We use python39 because UBI8 default python3 is 3.6 which is quite old
-RUN yum install -y python39 git zip wget curl tree && \
+RUN yum install -y python39 git zip wget curl && \
     yum clean all
 
 # Set working directory
