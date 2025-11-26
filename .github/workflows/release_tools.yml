@@ -27,6 +27,7 @@ jobs:
               source /app/venv/bin/activate && \
               python3 -m toolbox.cli --download --all --agree-to-terms && \
               cd downloads && \
+              tree -L 2 > /workspace/CONTENTS.txt && \
               zip -r /workspace/tools_bundle.zip .
             "
 
@@ -37,5 +38,6 @@ jobs:
           files: tools_bundle.zip
           tag_name: v${{ github.run_number }}
           name: Release v${{ github.run_number }}
+          body_path: CONTENTS.txt
           draft: false
           prerelease: false
