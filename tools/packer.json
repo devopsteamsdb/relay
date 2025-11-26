@@ -11,11 +11,24 @@
             "command": "dnf install -y --reinstall --downloadonly --downloaddir={download_dir} packer"
         }
     ],
-    "install_steps": [
-        {
-            "type": "shell",
-            "command": "dnf install -y {download_dir}/*.rpm"
-        }
-    ],
-    "idempotency_check": "packer --version"
-}
+    {
+        "name": "Packer",
+        "description": "Automated machine image creation tool",
+        "download_steps": [
+            {
+                "type": "shell",
+                "command": "dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+            },
+            {
+                "type": "shell",
+                "command": "dnf install -y --reinstall --downloadonly --downloaddir={download_dir} packer"
+            }
+        ],
+        "install_steps": [
+            {
+                "type": "shell",
+                "command": "dnf install -y {download_dir}/*.rpm"
+            }
+        ],
+        "idempotency_check": "packer version 2>&1 | grep -q 'Packer v'"
+    }
