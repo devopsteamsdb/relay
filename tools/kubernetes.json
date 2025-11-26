@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo\n[kubernetes]\nname=Kubernetes\nbaseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/\nenabled=1\ngpgcheck=1\ngpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key\nEOF"
+            "command": "K8S_VER=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -d. -f1,2) && cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo\n[kubernetes]\nname=Kubernetes\nbaseurl=https://pkgs.k8s.io/core:/stable:/$K8S_VER/rpm/\nenabled=1\ngpgcheck=1\ngpgkey=https://pkgs.k8s.io/core:/stable:/$K8S_VER/rpm/repodata/repomd.xml.key\nEOF"
         },
         {
             "type": "shell",

@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "wget -O {download_dir}/grafana.repo https://rpm.grafana.com/grafana.repo"
+            "command": "cat <<EOF | tee {download_dir}/grafana.repo\n[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt\nEOF"
         },
         {
             "type": "shell",

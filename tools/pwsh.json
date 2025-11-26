@@ -1,0 +1,21 @@
+{
+    "name": "PowerShell",
+    "description": "PowerShell for Linux",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "curl https://packages.microsoft.com/config/rhel/8/prod.repo | tee /etc/yum.repos.d/microsoft.repo"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} powershell"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/powershell*.rpm"
+        }
+    ],
+    "idempotency_check": "pwsh --version"
+}

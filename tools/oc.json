@@ -1,0 +1,21 @@
+{
+    "name": "OpenShift_Client",
+    "description": "OpenShift Command Line Interface (oc)",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "curl -L -o {download_dir}/oc.tar.gz https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "tar -zxvf {download_dir}/oc.tar.gz -C /usr/local/bin oc kubectl"
+        },
+        {
+            "type": "shell",
+            "command": "chmod +x /usr/local/bin/oc"
+        }
+    ],
+    "idempotency_check": "oc version"
+}

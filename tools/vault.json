@@ -1,0 +1,21 @@
+{
+    "name": "Vault",
+    "description": "HashiCorp Vault – secrets management and encryption",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} vault"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/vault*.rpm"
+        }
+    ],
+    "idempotency_check": "vault --version"
+}
