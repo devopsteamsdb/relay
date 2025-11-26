@@ -126,7 +126,7 @@ DevOps Tool Provisioning for Airgapped Environments
             if tool['name'] in self.installed_tools:
                 status_parts.append(f"{Fore.GREEN}[INSTALLED]{Style.RESET_ALL}")
             if tool['name'] in self.downloaded_tools:
-                status_parts.append(f"{Fore.CYAN}[DOWNLOADED]{Style.RESET_ALL}")
+                status_parts.append(f"{Fore.YELLOW}[DOWNLOADED]{Style.RESET_ALL}")
             
             status = " ".join(status_parts) if status_parts else ""
             print(f"{i}. {tool['name']} - {tool['description']} {status}")

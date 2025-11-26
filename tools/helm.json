@@ -14,11 +14,11 @@
         },
         {
             "type": "shell",
-            "command": "mv /tmp/linux-amd64/helm /usr/local/bin/helm"
+            "command": "mv /tmp/linux-amd64/helm /usr/bin/helm"
         },
         {
             "type": "shell",
-            "command": "chmod +x /usr/local/bin/helm"
+            "command": "chmod +x /usr/bin/helm"
         }
     ],
     "idempotency_check": "helm version --client"
