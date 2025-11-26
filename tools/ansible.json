@@ -4,17 +4,13 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "dnf install -y epel-release"
-        },
-        {
-            "type": "shell",
-            "command": "dnf install -y --downloadonly --downloaddir={download_dir} ansible"
+            "command": "pip3 download ansible --dest \"{download_dir}\""
         }
     ],
     "install_steps": [
         {
             "type": "shell",
-            "command": "dnf install -y {download_dir}/*.rpm"
+            "command": "pip3 install --no-index --find-links=\"{download_dir}\" ansible"
         }
     ],
     "idempotency_check": "ansible --version"
