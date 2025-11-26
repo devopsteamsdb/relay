@@ -85,17 +85,11 @@ def get_system_info():
         # os.getlogin() fails in Docker containers without a controlling terminal
         user = os.getenv('USER') or os.getenv('USERNAME') or 'unknown'
     
-    
     try:
         is_root = os.geteuid() == 0
     except AttributeError:
         # Windows does not have geteuid
         is_root = False # Assume not root on Windows for safety, or check Admin if needed.
-                        # For simulation purposes, we might want to bypass root check?
-                        # But the CLI checks is_root.
-                        # Let's set it to True if we are in simulation mode? 
-                        # No, get_system_info doesn't know about simulation mode.
-                        # We'll set it to False, and handle the check in CLI.
         pass
 
     return {
@@ -104,7 +98,8 @@ def get_system_info():
         "distro_name": distro_name,
         "python_version": python_version,
         "user": user,
-        "is_root": is_root
+        "is_root": is_root,
+        "package_manager": "apt" if distro_name.lower() in ["ubuntu", "debian", "kali"] else "dnf" if distro_name.lower() in ["rhel", "centos", "fedora", "rocky", "almalinux"] else "unknown"
     }
 
 def check_internet_connection(host="8.8.8.8", port=53, timeout=3):
@@ -128,7 +123,7 @@ def check_disk_space(path='/', required_gb=10):
 def check_command_exists(command: str) -> bool:
     """Checks if a command exists in the system's PATH."""
     return shutil.which(command) is not None
-
+    
 def check_package_manager(pm_name: str = None) -> bool:
     """
     Checks if a specific package manager exists.
