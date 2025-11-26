@@ -1,20 +1,44 @@
 {
     "name": "Kubernetes_kubectl",
     "description": "CLI for Kubernetes cluster management",
+    "version": "{{latest_version}}",
     "download_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "K8S_VER=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -d. -f1,2) && cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo\n[kubernetes]\nname=Kubernetes\nbaseurl=https://pkgs.k8s.io/core:/stable:/$K8S_VER/rpm/\nenabled=1\ngpgcheck=1\ngpgkey=https://pkgs.k8s.io/core:/stable:/$K8S_VER/rpm/repodata/repomd.xml.key\nEOF"
         },
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y --downloadonly --downloaddir=\"{download_dir}\" kubectl"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "K8S_VER=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -d. -f1,2) && mkdir -p /etc/apt/keyrings && curl -fsSL https://pkgs.k8s.io/core:/stable:/$K8S_VER/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg --yes"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "K8S_VER=$(curl -L -s https://dl.k8s.io/release/stable.txt | cut -d. -f1,2) && echo \"deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$K8S_VER/deb/ /\" | tee /etc/apt/sources.list.d/kubernetes.list"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "apt-get update && apt-get install -y --download-only -o Dir::Cache::archives={download_dir} kubectl"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y \"{download_dir}\"/*.rpm"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "dpkg -i {download_dir}/*.deb || apt-get install -f -y"
         }
     ],
     "idempotency_check": "kubectl version --client"

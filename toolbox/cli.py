@@ -156,6 +156,14 @@ DevOps Tool Provisioning for Airgapped Environments
 
         success = True
         for step in steps:
+            # Check if step is specific to a package manager
+            step_pm = step.get('package_manager')
+            system_pm = self.system_info.get('package_manager')
+            
+            if step_pm and step_pm != system_pm:
+                # Skip this step as it's for a different package manager
+                continue
+
             cmd = step.get('command')
             if cmd:
                 # Replace placeholders if any (e.g., {download_dir})
@@ -203,6 +211,14 @@ DevOps Tool Provisioning for Airgapped Environments
         tool_download_dir = os.path.join(self.downloads_dir, tool['name'])
         success = True
         for step in steps:
+            # Check if step is specific to a package manager
+            step_pm = step.get('package_manager')
+            system_pm = self.system_info.get('package_manager')
+            
+            if step_pm and step_pm != system_pm:
+                # Skip this step as it's for a different package manager
+                continue
+
             cmd = step.get('command')
             if cmd:
                 cmd = cmd.replace("{download_dir}", tool_download_dir)
