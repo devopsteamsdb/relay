@@ -1,0 +1,17 @@
+{
+    "name": "Ansible Collections",
+    "description": "Common Ansible collections for network and cloud automation",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "python3 toolbox/download_collections.py --output-dir {download_dir} ansible.netcommon ansible.posix ansible.utils ansible.windows check_point.mgmt cisco.aci cisco.ios cisco.ise community.crypto community.docker community.general community.vmware community.windows containers.podman dellemc.openmanage f5networks.f5_modules fortinet.console fortinet.fortimanager fortinet.fortios fortinet.fortiswitch fortinet.fortiweb junipernetworks.junos kubernetes.core lowlydba.sqlserver microsoft.ad netapp.ontap netbox.netbox paloaltonetworks.panos vmware.vmware vmware.vmware_rest"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "ansible-galaxy collection install {download_dir}/*.tar.gz"
+        }
+    ],
+    "idempotency_check": "ansible-galaxy collection list | grep community.general"
+}
