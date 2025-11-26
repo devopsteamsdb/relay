@@ -26,6 +26,7 @@ init()
 class ToolboxCLI:
     def __init__(self):
         self.installed_tools = set() # This will reflect tools confirmed as installed during runtime
+        self.downloaded_tools = set() # Track which tools have been downloaded
         self.tools_config = load_tool_configurations()
         self.system_info = get_system_info()
         self.simulation_mode = False # Add a simulation mode flag
@@ -58,6 +59,19 @@ class ToolboxCLI:
             else:
                 print(f"{Fore.YELLOW}  Warning: No idempotency check defined for {tool['name']}. Cannot auto-detect.{Style.RESET_ALL}")
         time.sleep(1) # Give user time to see the checks
+        
+        # Check which tools have been downloaded
+        self._check_downloaded_tools()
+    
+    def _check_downloaded_tools(self):
+        """
+        Check which tools have their downloads directory present.
+        """
+        if os.path.exists(self.downloads_dir):
+            for tool in self.tools_config:
+                tool_download_dir = os.path.join(self.downloads_dir, tool['name'])
+                if os.path.exists(tool_download_dir) and os.listdir(tool_download_dir):
+                    self.downloaded_tools.add(tool['name'])
 
     def print_ascii_art(self):
         ascii_art = '''
@@ -108,7 +122,13 @@ DevOps Tool Provisioning for Airgapped Environments
         print(Fore.YELLOW + f"{action} DevOps Tools" + Style.RESET_ALL)
 
         for i, tool in enumerate(self.tools_config, 1):
-            status = f"{Fore.GREEN}[INSTALLED]{Style.RESET_ALL}" if tool['name'] in self.installed_tools else ""
+            status_parts = []
+            if tool['name'] in self.installed_tools:
+                status_parts.append(f"{Fore.GREEN}[INSTALLED]{Style.RESET_ALL}")
+            if tool['name'] in self.downloaded_tools:
+                status_parts.append(f"{Fore.CYAN}[DOWNLOADED]{Style.RESET_ALL}")
+            
+            status = " ".join(status_parts) if status_parts else ""
             print(f"{i}. {tool['name']} - {tool['description']} {status}")
 
         print("b. Back to Main Menu")
@@ -152,6 +172,7 @@ DevOps Tool Provisioning for Airgapped Environments
         
         if success:
             print(f"{Fore.GREEN}[SUCCESS] {tool['name']} downloaded successfully.{Style.RESET_ALL}")
+            self.downloaded_tools.add(tool['name'])
         else:
             print(f"{Fore.RED}[FAILED] {tool['name']} download failed.{Style.RESET_ALL}")
         
@@ -162,6 +183,13 @@ DevOps Tool Provisioning for Airgapped Environments
             print(f"\n{Fore.YELLOW}{tool['name']} is already installed. Skipping.{Style.RESET_ALL}")
             time.sleep(1)
             return True
+        
+        # Check if tool has been downloaded (skip in simulation mode)
+        if not self.simulation_mode and tool['name'] not in self.downloaded_tools:
+            print(f"\n{Fore.RED}ERROR: {tool['name']} has not been downloaded yet.{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}Please run download mode first to fetch this tool.{Style.RESET_ALL}")
+            input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+            return False
 
         print(f"\n{Fore.YELLOW}Initiating installation for: {tool['name']}{Style.RESET_ALL}")
 
