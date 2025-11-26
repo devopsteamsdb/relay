@@ -1,21 +1,21 @@
 {
     "name": "NGINX",
     "description": "High-performance web server and reverse proxy",
-    "installation_steps": {
-        "pre_commands": [
-            "apt-get update"
-        ],
-        "main_commands": [
-            "apt-get install -y nginx"
-        ],
-        "post_commands": [
-            "systemctl start nginx",
-            "systemctl enable nginx"
-        ],
-        "verification_commands": [
-            "systemctl status nginx | grep 'active (running)'",
-            "curl -I http://localhost"
-        ]
-    },
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} nginx"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/*.rpm"
+        },
+        {
+            "type": "shell",
+            "command": "systemctl enable --now nginx"
+        }
+    ],
     "idempotency_check": "systemctl is-active nginx"
 }

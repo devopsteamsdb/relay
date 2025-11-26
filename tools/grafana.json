@@ -1,25 +1,33 @@
 {
     "name": "Grafana",
     "description": "Open-source platform for monitoring and observability",
-    "installation_steps": {
-        "pre_commands": [
-            "apt-get update",
-            "apt-get install -y apt-transport-https software-properties-common wget",
-            "wget -q -O - https://apt.grafana.com/gpg.key | apt-key add -"
-        ],
-        "main_commands": [
-            "echo \"deb https://apt.grafana.com stable main\" | tee -a /etc/apt/sources.list.d/grafana.list",
-            "apt-get update",
-            "apt-get install -y grafana"
-        ],
-        "post_commands": [
-            "systemctl daemon-reload",
-            "systemctl enable grafana-server",
-            "systemctl start grafana-server"
-        ],
-        "verification_commands": [
-            "systemctl status grafana-server | grep 'active (running)'"
-        ]
-    },
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "wget -O {download_dir}/grafana.repo https://rpm.grafana.com/grafana.repo"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} grafana"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "cp {download_dir}/grafana.repo /etc/yum.repos.d/"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/*.rpm"
+        },
+        {
+            "type": "shell",
+            "command": "systemctl daemon-reload"
+        },
+        {
+            "type": "shell",
+            "command": "systemctl enable --now grafana-server"
+        }
+    ],
     "idempotency_check": "systemctl is-active grafana-server"
 }

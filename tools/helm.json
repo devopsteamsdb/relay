@@ -4,17 +4,21 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
-        },
-        {
-            "type": "shell",
-            "command": "echo 'Helm downloaded via script (binary install). For airgap, manual binary download is preferred but script is used here for simplicity in download phase.'"
+            "command": "curl -L https://get.helm.sh/helm-v3.13.0-linux-amd64.tar.gz -o {download_dir}/helm-v3.13.0-linux-amd64.tar.gz"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
-            "command": "echo 'Helm installed via script in download phase. Ensure binary is in path.'"
+            "command": "tar -zxvf {download_dir}/helm-v3.13.0-linux-amd64.tar.gz -C /tmp/"
+        },
+        {
+            "type": "shell",
+            "command": "mv /tmp/linux-amd64/helm /usr/local/bin/helm"
+        },
+        {
+            "type": "shell",
+            "command": "chmod +x /usr/local/bin/helm"
         }
     ],
     "idempotency_check": "helm version --client"
