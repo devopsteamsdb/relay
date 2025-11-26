@@ -1,16 +1,16 @@
 {
-    "name": "Docker Compose",
+    "name": "Docker_Compose",
     "description": "Define and run multi-container applications with Docker",
     "download_steps": [
         {
             "type": "shell",
-            "command": "curl -L \"https://github.com/docker/compose/releases/download/v2.29.1/docker-compose-$(uname -s)-$(uname -m)\" -o {download_dir}/docker-compose"
+            "command": "curl -L \"https://github.com/docker/compose/releases/download/v2.29.1/docker-compose-$(uname -s)-$(uname -m)\" -o \"{download_dir}/docker-compose\""
         }
     ],
     "install_steps": [
         {
             "type": "shell",
-            "command": "cp {download_dir}/docker-compose /usr/local/bin/docker-compose"
+            "command": "cp \"{download_dir}/docker-compose\" /usr/local/bin/docker-compose"
         },
         {
             "type": "shell",
