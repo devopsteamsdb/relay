@@ -113,7 +113,7 @@ DevOps Tool Provisioning for Airgapped Environments
         print("2. Install Tools (Offline/Airgapped)")
         print("3. Check System Requirements")
         print("4. View Installed Tools (during this session)")
-        print("5. Exit")
+        print("q. Quit")
         print(Fore.CYAN + "Enter your choice: " + Style.RESET_ALL, end="")
 
     def show_tool_selection_menu(self, action="Install"):
@@ -355,7 +355,7 @@ DevOps Tool Provisioning for Airgapped Environments
                 self.check_system_requirements()
             elif choice == '4':
                 self.show_installed_tools()
-            elif choice == '5':
+            elif choice.lower() == 'q':
                 print(f"{Fore.CYAN}Exiting Relay. Goodbye!{Style.RESET_ALL}")
                 break
             else:
