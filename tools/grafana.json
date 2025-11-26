@@ -4,21 +4,45 @@
     "download_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "cat <<EOF | tee {download_dir}/grafana.repo\n[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt\nEOF"
         },
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y --downloadonly --downloaddir={download_dir} grafana"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "echo 'deb https://packages.grafana.com/oss/deb stable main' | tee /etc/apt/sources.list.d/grafana.list"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "apt-get update && apt-get install -y --download-only -o Dir::Cache::archives={download_dir} grafana"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "cp {download_dir}/grafana.repo /etc/yum.repos.d/"
         },
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y {download_dir}/*.rpm"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "dpkg -i {download_dir}/*.deb || apt-get install -f -y"
         },
         {
             "type": "shell",

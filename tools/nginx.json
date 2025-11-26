@@ -4,18 +4,30 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "dnf install -y --downloadonly --downloaddir={download_dir} nginx"
+            "package_manager": "dnf",
+            "command": "dnf download --resolve --destdir={download_dir} nginx"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "apt-get update && apt-get install -y --download-only -o Dir::Cache::archives={download_dir} nginx"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y {download_dir}/*.rpm"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "dpkg -i {download_dir}/*.deb || apt-get install -f -y"
         },
         {
             "type": "shell",
             "command": "systemctl enable --now nginx"
         }
     ],
-    "idempotency_check": "systemctl is-active nginx"
+    "idempotency_check": "nginx -v"
 }

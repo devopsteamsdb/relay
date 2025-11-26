@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "curl -L \"https://github.com/docker/compose/releases/download/v2.29.1/docker-compose-$(uname -s)-$(uname -m)\" -o \"{download_dir}/docker-compose\""
+            "command": "COMPOSE_VER=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '\"' -f 4) && curl -L \"https://github.com/docker/compose/releases/download/$COMPOSE_VER/docker-compose-$(uname -s)-$(uname -m)\" -o \"{download_dir}/docker-compose\""
         }
     ],
     "install_steps": [

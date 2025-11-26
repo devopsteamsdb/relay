@@ -4,17 +4,40 @@
     "download_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "curl https://packages.microsoft.com/config/rhel/8/prod.repo | tee /etc/yum.repos.d/microsoft.repo"
         },
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y --downloadonly --downloaddir={download_dir} powershell"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "dpkg -i /tmp/packages-microsoft-prod.deb"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "apt-get update && apt-get install -y --download-only -o Dir::Cache::archives={download_dir} powershell"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y {download_dir}/powershell*.rpm"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "dpkg -i {download_dir}/powershell*.deb || apt-get install -f -y"
         }
     ],
     "idempotency_check": "pwsh --version"

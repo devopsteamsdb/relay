@@ -4,13 +4,13 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "curl -L https://github.com/prometheus/prometheus/releases/download/v2.45.0/prometheus-2.45.0.linux-amd64.tar.gz -o {download_dir}/prometheus-2.45.0.linux-amd64.tar.gz"
+            "command": "PROM_VER=$(curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep tag_name | cut -d '\"' -f 4 | sed 's/v//') && curl -L https://github.com/prometheus/prometheus/releases/download/v$PROM_VER/prometheus-$PROM_VER.linux-amd64.tar.gz -o {download_dir}/prometheus.tar.gz"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
-            "command": "tar xvfz {download_dir}/prometheus-2.45.0.linux-amd64.tar.gz -C /tmp/"
+            "command": "tar xvfz {download_dir}/prometheus.tar.gz -C /tmp/ --strip-components=1"
         },
         {
             "type": "shell",
@@ -22,19 +22,19 @@
         },
         {
             "type": "shell",
-            "command": "cp /tmp/prometheus-2.45.0.linux-amd64/prometheus /usr/local/bin/"
+            "command": "cp /tmp/prometheus /usr/local/bin/"
         },
         {
             "type": "shell",
-            "command": "cp /tmp/prometheus-2.45.0.linux-amd64/promtool /usr/local/bin/"
+            "command": "cp /tmp/promtool /usr/local/bin/"
         },
         {
             "type": "shell",
-            "command": "cp -r /tmp/prometheus-2.45.0.linux-amd64/consoles /etc/prometheus"
+            "command": "cp -r /tmp/consoles /etc/prometheus"
         },
         {
             "type": "shell",
-            "command": "cp -r /tmp/prometheus-2.45.0.linux-amd64/console_libraries /etc/prometheus"
+            "command": "cp -r /tmp/console_libraries /etc/prometheus"
         },
         {
             "type": "shell",

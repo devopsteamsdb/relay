@@ -4,21 +4,45 @@
     "download_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo"
         },
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key"
         },
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y --downloadonly --downloaddir={download_dir} java-17-openjdk jenkins"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | apt-key add -"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "echo 'deb https://pkg.jenkins.io/debian-stable binary/' | tee /etc/apt/sources.list.d/jenkins.list"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "apt-get update && apt-get install -y --download-only -o Dir::Cache::archives={download_dir} openjdk-17-jdk jenkins"
         }
     ],
     "install_steps": [
         {
             "type": "shell",
+            "package_manager": "dnf",
             "command": "dnf install -y {download_dir}/*.rpm"
+        },
+        {
+            "type": "shell",
+            "package_manager": "apt",
+            "command": "dpkg -i {download_dir}/*.deb || apt-get install -f -y"
         },
         {
             "type": "shell",
