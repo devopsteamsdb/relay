@@ -10,7 +10,7 @@
     "install_steps": [
         {
             "type": "shell",
-            "command": "python3 -m pip install --no-index --find-links=\"{download_dir}\" ansible"
+            "command": "venv/bin/python3 -m pip install --no-index --find-links=\"{download_dir}\" ansible"
         }
     ],
     "idempotency_check": "ansible --version"
