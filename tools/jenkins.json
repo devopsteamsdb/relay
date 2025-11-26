@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "wget -O {download_dir}/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo"
+            "command": "wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo"
         },
         {
             "type": "shell",
