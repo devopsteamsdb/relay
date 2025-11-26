@@ -34,3 +34,4 @@
 ## Recommended Tools
 - [ ] **HashiCorp Vault**: Industry standard for secrets management, encryption, and certificates. Airgap-friendly single binary.
 - [ ] **k9s**: Terminal-based UI for Kubernetes clusters. Makes managing clusters significantly faster and easier.
+- [ ] **oc**: OpenShift client. Airgap-friendly single binary.
