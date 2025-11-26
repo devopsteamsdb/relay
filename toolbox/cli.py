@@ -131,9 +131,9 @@ DevOps Tool Provisioning for Airgapped Environments
             status = " ".join(status_parts) if status_parts else ""
             print(f"{i}. {tool['name']} - {tool['description']} {status}")
 
-        print("a. All (Download/Install all tools)")
+        print("a. All")
         print("b. Back to Main Menu")
-        print("q. Quit to Main Menu")
+        print("q. Quit")
         print(f"{Fore.CYAN}Select a tool to {action.lower()} by number, or multiple (e.g., 1,3,4): {Style.RESET_ALL}", end="")
         if self.simulation_mode:
             print(f" {Fore.YELLOW}[SIMULATION MODE]{Style.RESET_ALL}")
