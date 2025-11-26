@@ -21,17 +21,30 @@ def download_file(url, dest_path):
         return False
 
 def get_collection_info(namespace, name):
-    api_url = f"https://galaxy.ansible.com/api/v2/collections/{namespace}/{name}/"
-    try:
-        with urllib.request.urlopen(api_url) as response:
-            data = json.loads(response.read().decode())
-            return data
-    except urllib.error.HTTPError as e:
-        print(f"Error fetching info for {namespace}.{name}: {e}")
-        return None
-    except Exception as e:
-        print(f"Error: {e}")
-        return None
+    # Try v3 API first as it's the current standard for Galaxy NG
+    api_url_v3 = f"https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/index/{namespace}/{name}/"
+    
+    # Fallback to v2 if v3 fails (legacy Galaxy)
+    api_url_v2 = f"https://galaxy.ansible.com/api/v2/collections/{namespace}/{name}/"
+    
+    for api_url in [api_url_v3, api_url_v2]:
+        try:
+            # Create a request with a User-Agent to avoid 403s or blocks
+            req = urllib.request.Request(
+                api_url, 
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+            )
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+                return data
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                continue # Try next API version
+            print(f"Error fetching info for {namespace}.{name} from {api_url}: {e}")
+        except Exception as e:
+            print(f"Error: {e}")
+            
+    return None
 
 def main():
     parser = argparse.ArgumentParser(description="Download Ansible collections from Galaxy API")
@@ -58,19 +71,59 @@ def main():
         if not info:
             fail_count += 1
             continue
+            
+        # DEBUG: Print keys to understand structure
+        # print(f"DEBUG: Keys in info: {list(info.keys())}")
+        
+        download_url = None
+        
+        # Strategy: Use 'versions_url' to list versions, find the highest/latest, and get its download link
+        versions_url = info.get("versions_url")
+        highest_version = info.get("highest_version", {}).get("version")
+        
+        if versions_url and highest_version:
+            print(f"Found highest version: {highest_version}. Fetching version details...")
+            # The versions_url usually lists versions. We might need to append the version number or filter.
+            # Let's try constructing the version-specific URL directly if we know the pattern
+            # Pattern v3: .../versions/{version}/
+            # Pattern v2: .../versions/{version}/
+            
+            # Try to fetch the specific version directly using the versions_url base
+            # If versions_url is .../versions/, we append {version}/
+            
+            # Handle relative URLs
+            if versions_url.startswith("/"):
+                versions_url = f"https://galaxy.ansible.com{versions_url}"
+            
+            target_version_url = f"{versions_url.rstrip('/')}/{highest_version}/"
+            
+            try:
+                req = urllib.request.Request(
+                    target_version_url, 
+                    headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+                )
+                with urllib.request.urlopen(req) as response:
+                    version_data = json.loads(response.read().decode())
+                    download_url = version_data.get("download_url")
+            except Exception as e:
+                print(f"Error fetching version details from {target_version_url}: {e}")
+                # Fallback: List all versions and find the match
+                try:
+                    req = urllib.request.Request(
+                        versions_url, 
+                        headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+                    )
+                    with urllib.request.urlopen(req) as response:
+                        versions_data = json.loads(response.read().decode())
+                        # versions_data might be a list or a paginated dict
+                        results = versions_data.get("results", []) if isinstance(versions_data, dict) else versions_data
+                        for v in results:
+                            if v.get("version") == highest_version:
+                                download_url = v.get("download_url")
+                                break
+                except Exception as e2:
+                    print(f"Error listing versions: {e2}")
 
-        latest_version_url = info.get("latest_version", {}).get("href")
-        if not latest_version_url:
-             # Fallback to finding latest version manually if structure differs
-             print("Could not find latest version URL.")
-             fail_count += 1
-             continue
-        
-        # The 'latest_version' href usually points to the version details which has the download URL
-        # But top level info often has 'download_url' for the latest version directly or inside 'latest_version' object
-        # Let's check 'latest_version' object structure from the first response
-        download_url = info.get("latest_version", {}).get("download_url")
-        
         if not download_url:
              print(f"Could not find download URL for {collection}")
              fail_count += 1
