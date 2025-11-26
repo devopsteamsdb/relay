@@ -34,12 +34,13 @@ Relay is a CLI-based tool designed to simplify the deployment of DevOps tools in
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/relay.git
+git clone https://github.com/devopsteamsdb/relay.git
 cd relay
 ```
 
 2. Run the setup script:
 ```bash
+sudo chmod +x setup.sh
 sudo ./setup.sh
 ```
 
@@ -49,12 +50,12 @@ sudo ./setup.sh
 
 Download tools to a local directory:
 ```bash
-sudo python3 -m toolbox.cli --download
+sudo venv/bin/python3 -m  toolbox.cli --download
 ```
 
 Or use the interactive menu:
 ```bash
-sudo python3 -m toolbox.cli
+sudo venv/bin/python3 -m  toolbox.cli
 # Select option 1: Download Tools
 ```
 
@@ -66,12 +67,12 @@ Copy the entire project directory (including the `downloads/` folder) to your ai
 
 Install tools from local files:
 ```bash
-sudo python3 -m toolbox.cli --install
+sudo venv/bin/python3 -m  toolbox.cli --install
 ```
 
 Or use the interactive menu:
 ```bash
-sudo python3 -m toolbox.cli
+sudo venv/bin/python3 -m  toolbox.cli
 # Select option 2: Install Tools
 ```
 
@@ -79,7 +80,7 @@ sudo python3 -m toolbox.cli
 
 Test the tool without making actual changes:
 ```bash
-sudo python3 -m toolbox.cli --simulate
+sudo venv/bin/python3 -m  toolbox.cli --simulate
 ```
 
 ## Project Structure

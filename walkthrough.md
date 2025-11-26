@@ -21,7 +21,7 @@ sudo ./setup.sh
 On a machine with internet access, download the desired tools:
 ```bash
 # Interactive Menu
-sudo python3 -m toolbox.cli --download
+sudo venv/bin/python3 -m  toolbox.cli --download
 
 # Or select specific tools via menu
 ```
@@ -34,11 +34,11 @@ Copy the entire `devops-tools` directory (including `downloads/`) to your airgap
 On the airgapped machine:
 ```bash
 # Interactive Menu
-sudo python3 -m toolbox.cli --install
+sudo venv/bin/python3 -m  toolbox.cli --install
 ```
 
 ## Verification Results
-- **Simulation**: Verified CLI logic using `python3 -m toolbox.cli --simulate`.
+- **Simulation**: Verified CLI logic using `venv/bin/python3 -m  toolbox.cli --simulate`.
 - **Download Logic**: Confirmed that `dnf install --downloadonly` commands are generated correctly.
 - **Install Logic**: Confirmed that `dnf install local/*.rpm` commands are generated correctly.
 
