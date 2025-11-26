@@ -131,7 +131,9 @@ DevOps Tool Provisioning for Airgapped Environments
             status = " ".join(status_parts) if status_parts else ""
             print(f"{i}. {tool['name']} - {tool['description']} {status}")
 
+        print("a. All (Download/Install all tools)")
         print("b. Back to Main Menu")
+        print("q. Quit to Main Menu")
         print(f"{Fore.CYAN}Select a tool to {action.lower()} by number, or multiple (e.g., 1,3,4): {Style.RESET_ALL}", end="")
         if self.simulation_mode:
             print(f" {Fore.YELLOW}[SIMULATION MODE]{Style.RESET_ALL}")
@@ -365,8 +367,21 @@ DevOps Tool Provisioning for Airgapped Environments
             self.show_tool_selection_menu(action=action)
             selection = input().strip().lower()
 
-            if selection == 'b':
+            if selection == 'b' or selection == 'q':
                 break
+            
+            if selection == 'a':
+                # Select all tools
+                indices = list(range(len(self.tools_config)))
+                for index in indices:
+                    tool = self.tools_config[index]
+                    if action == "Download":
+                        self.download_tool(tool)
+                    elif action == "Install":
+                        self.install_tool(tool)
+                
+                input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+                continue
 
             try:
                 if ',' in selection:
@@ -378,15 +393,18 @@ DevOps Tool Provisioning for Airgapped Environments
 
                 if valid_indices:
                     for index in valid_indices:
+                        tool = self.tools_config[index]
                         if action == "Download":
-                            self.download_tool(self.tools_config[index])
-                        else:
-                            self.install_tool(self.tools_config[index])
+                            self.download_tool(tool)
+                        elif action == "Install":
+                            self.install_tool(tool)
+                    
+                    input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
                 else:
                     print(f"{Fore.RED}Invalid selection. Please try again.{Style.RESET_ALL}")
                     time.sleep(1)
             except ValueError:
-                print(f"{Fore.RED}Invalid input. Please enter numbers only.{Style.RESET_ALL}")
+                print(f"{Fore.RED}Invalid input. Please enter numbers separated by commas, 'a' for all, 'b' to go back, or 'q' to quit.{Style.RESET_ALL}")
                 time.sleep(1)
 
 if __name__ == "__main__":
