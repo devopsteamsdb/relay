@@ -18,7 +18,7 @@
 - [ ] **Proxy Support**: Add support for configuring HTTP/HTTPS proxies for downloads, as this is common in enterprise environments.
 
 ## Code Quality & Maintenance
-- [ ] **Remove Legacy Code**: The `_install_tool_legacy` method in `toolbox/cli.py` seems to be for older configuration formats. If all tools are converted to the new format, remove this dead code.
+- [x] **Remove Legacy Code**: The `_install_tool_legacy` method in `toolbox/cli.py` seems to be for older configuration formats. If all tools are converted to the new format, remove this dead code.
 - [ ] **Refactor `download_collections.py`**: Convert the script into a module with a class structure to make it easier to import and test. Avoid hardcoded User-Agent strings (move to a constant).
 - [ ] **Type Hinting**: Add type hints to all functions and method signatures to improve code readability and enable static analysis.
 - [ ] **Docstrings**: Ensure all functions and classes have comprehensive docstrings explaining their purpose, arguments, and return values.
@@ -28,5 +28,5 @@
 - [ ] **Integration Tests**: Add integration tests to verify the end-to-end flow (download -> install) using a mock environment or container.
 
 ## Usability
-- [ ] **Progress Bars**: Use a library like `tqdm` to show progress bars during large file downloads.
+- [x] **Progress Bars**: Use a library like `tqdm` to show progress bars during large file downloads.
 - [ ] **Summary Report**: Generate a summary report (text or HTML) after batch operations (Download All / Install All) listing successful and failed items.

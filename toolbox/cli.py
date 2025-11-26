@@ -197,12 +197,6 @@ DevOps Tool Provisioning for Airgapped Environments
 
         steps = tool.get('install_steps', [])
         if not steps:
-             # Fallback to old schema for compatibility during migration? 
-             # Or just fail. Let's try to support old schema if 'install_steps' is missing but 'installation_steps' exists.
-             if 'installation_steps' in tool:
-                 print(f"{Fore.YELLOW}Legacy configuration detected. Using old installation method.{Style.RESET_ALL}")
-                 return self._install_tool_legacy(tool)
-             
              print(f"{Fore.RED}No install steps defined for {tool['name']}.{Style.RESET_ALL}")
              return False
 
@@ -225,36 +219,7 @@ DevOps Tool Provisioning for Airgapped Environments
         input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
         return success
 
-    def _install_tool_legacy(self, tool):
-        # ... (Previous install logic moved here) ...
-        steps = [
-            ("pre_commands", "PRE-INSTALLATION"),
-            ("main_commands", "MAIN INSTALLATION"),
-            ("post_commands", "POST-INSTALLATION"),
-            ("verification_commands", "VERIFICATION")
-        ]
 
-        install_successful = True
-        for step_key, step_name in steps:
-            commands = tool['installation_steps'].get(step_key, [])
-            if commands:
-                print(f"\n{Fore.YELLOW}--- {step_name} Steps for {tool['name']} ---{Style.RESET_ALL}")
-                for cmd in commands:
-                    if not execute_command(cmd, description=f"{tool['name']} {step_name} step", simulate=self.simulation_mode):
-                        install_successful = False
-                        print(f"{Fore.RED}Installation of {tool['name']} aborted due to failed command.{Style.RESET_ALL}")
-                        break # Exit inner loop
-                if not install_successful:
-                    break # Exit outer loop
-
-        if install_successful:
-            print(f"\n{Fore.GREEN}[SUCCESS] {tool['name']} installed successfully.{Style.RESET_ALL}")
-            self.installed_tools.add(tool['name'])
-        else:
-            print(f"\n{Fore.RED}[FAILED] {tool['name']} installation failed.{Style.RESET_ALL}")
-        
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
-        return install_successful
 
 
     def check_system_requirements(self):
