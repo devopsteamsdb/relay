@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "dnf install -y --reinstall --downloadonly --downloaddir={download_dir} git"
+            "command": "dnf download --resolve --destdir={download_dir} git"
         }
     ],
     "install_steps": [
