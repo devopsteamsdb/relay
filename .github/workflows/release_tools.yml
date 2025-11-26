@@ -1,0 +1,41 @@
+name: Release Tools
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required for creating releases
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t devops-tools .
+
+      - name: Run download in Docker
+        run: |
+          # Run the container, mounting the current directory to extract the zip later
+          # We run the download command non-interactively
+          docker run --rm \
+            -v ${{ github.workspace }}:/workspace \
+            devops-tools \
+            /bin/bash -c "
+              source /app/venv/bin/activate && \
+              python3 -m toolbox.cli --download --all --agree-to-terms && \
+              cd downloads && \
+              zip -r /workspace/tools_bundle.zip .
+            "
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+        with:
+          files: tools_bundle.zip
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          draft: false
+          prerelease: false

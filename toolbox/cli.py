@@ -296,16 +296,29 @@ DevOps Tool Provisioning for Airgapped Environments
             self.download_mode = True
         if "--install" in sys.argv:
             self.install_mode = True
+        
+        # Check for non-interactive flags
+        auto_agree = "--agree-to-terms" in sys.argv
+        select_all = "--all" in sys.argv
 
-        if not self.show_disclaimer():
-            return
+        if not auto_agree:
+            if not self.show_disclaimer():
+                return
+        else:
+             print(f"{Fore.YELLOW}Automatically agreed to terms via --agree-to-terms flag.{Style.RESET_ALL}")
 
         if self.download_mode:
-             self._run_tool_selection_loop(action="Download")
+             if select_all:
+                 self._process_all_tools(action="Download")
+             else:
+                 self._run_tool_selection_loop(action="Download")
              return
         
         if self.install_mode:
-             self._run_tool_selection_loop(action="Install")
+             if select_all:
+                 self._process_all_tools(action="Install")
+             else:
+                 self._run_tool_selection_loop(action="Install")
              return
 
         while True:
@@ -327,6 +340,16 @@ DevOps Tool Provisioning for Airgapped Environments
                 print(f"{Fore.RED}Invalid choice. Please try again.{Style.RESET_ALL}")
                 time.sleep(1)
 
+    def _process_all_tools(self, action):
+        """Helper to process all tools without user interaction"""
+        print(f"{Fore.CYAN}Processing ALL tools for {action}...{Style.RESET_ALL}")
+        for tool in self.tools_config:
+            if action == "Download":
+                self.download_tool(tool)
+            elif action == "Install":
+                self.install_tool(tool)
+        print(f"{Fore.GREEN}All tools processed.{Style.RESET_ALL}")
+
     def _run_tool_selection_loop(self, action):
         while True:
             self.show_tool_selection_menu(action=action)
@@ -341,13 +364,7 @@ DevOps Tool Provisioning for Airgapped Environments
             
             if selection == 'a':
                 # Select all tools
-                indices = list(range(len(self.tools_config)))
-                for index in indices:
-                    tool = self.tools_config[index]
-                    if action == "Download":
-                        self.download_tool(tool)
-                    elif action == "Install":
-                        self.install_tool(tool)
+                self._process_all_tools(action=action)
                 
                 input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
                 continue
