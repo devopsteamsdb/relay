@@ -12,7 +12,7 @@
         },
         {
             "type": "shell",
-            "command": "dnf install -y --reinstall --downloadonly --downloaddir={download_dir} java-17-openjdk jenkins"
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} java-17-openjdk jenkins"
         }
     ],
     "install_steps": [

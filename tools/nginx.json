@@ -4,7 +4,7 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "dnf install -y --reinstall --downloadonly --downloaddir={download_dir} nginx"
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} nginx"
         }
     ],
     "install_steps": [

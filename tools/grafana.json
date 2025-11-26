@@ -8,7 +8,7 @@
         },
         {
             "type": "shell",
-            "command": "dnf install -y --reinstall --downloadonly --downloaddir={download_dir} grafana"
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} grafana"
         }
     ],
     "install_steps": [
