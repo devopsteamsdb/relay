@@ -11,19 +11,28 @@ Relay is a CLI-based DevOps tool provisioning system designed for airgapped envi
 - **Python Packages:**
   - `colorama` (>=0.4.6): For cross-platform colored terminal output.
 - **System Requirements:**
-  - Linux-based OS (uses `apt-get`, `dpkg`)
-  - Root privileges (required for installation commands)
-  - `python3-venv` (for virtual environment management)
+  - **OS:** RHEL 8+, CentOS 8+, or compatible RPM-based distros
+  - **Package Manager:** `dnf` (or `yum`)
+  - **Root Privileges:** Required for installation commands
+  - **Python:** Python 3.6+ with `venv` module
 
 ## Architecture
-- **Entry Point:** `ratchet/cli.py`
-- **Configuration:** Tool definitions are stored as JSON files in the `tools/` directory. Each JSON file defines installation steps (pre, main, post, verification) and idempotency checks.
-- **Execution:** Uses Python's `subprocess` module to execute system commands defined in the JSON configurations.
-- **User Interface:** Interactive CLI with menu-based navigation using standard input/output.
+- **Entry Point:** `toolbox/cli.py`
+- **Configuration:** Tool definitions are stored as JSON files in the `tools/` directory. Each JSON file defines:
+    - `download_steps`: Commands to fetch artifacts (online phase)
+    - `install_steps`: Commands to install from local artifacts (offline phase)
+    - `idempotency_check`: Command to verify installation
+- **Execution:** Uses Python's `subprocess` module to execute system commands.
+- **Workflow:**
+    1. **Download Phase:** Fetches RPMs/binaries to `downloads/{tool_name}/`
+    2. **Transfer:** User copies project to airgapped system
+    3. **Install Phase:** Installs from local `downloads/` directory
+- **User Interface:** Interactive CLI with menu-based navigation and color-coded status (`[INSTALLED]`, `[DOWNLOADED]`).
 
 ## Key Files
-- `setup.sh`: Bootstraps the environment, installs dependencies, and creates a virtual environment.
+- `setup.sh`: Bootstraps the environment, checks for RHEL/CentOS, and creates a virtual environment.
 - `requirements.txt`: Lists Python dependencies.
-- `ratchet/cli.py`: Main application logic.
-- `ratchet/config.py`: Handles loading of tool configurations.
-- `ratchet/utils.py`: Utility functions for system checks and command execution.
+- `toolbox/cli.py`: Main application logic, menu system, and workflow orchestration.
+- `toolbox/config.py`: Handles loading of tool configurations.
+- `toolbox/utils.py`: Utility functions for system checks, package manager detection, and command execution.
+- `tools/*.json`: Individual tool configuration files.
