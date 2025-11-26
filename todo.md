@@ -33,6 +33,7 @@
 
 ## Fixes
 - [ ] **fix hardcoded versions**: some tools have hardcoded versions in their configuration files, which should be fetched from the tool's website.
+- [ ] **fix grafana download**: https://rpm.grafana.com/grafana.repo is not available (404)
 
 ## Recommended Tools
 - [ ] **HashiCorp Vault**: Industry standard for secrets management, encryption, and certificates. Airgap-friendly single binary.
