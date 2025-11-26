@@ -1,0 +1,29 @@
+{
+    "name": "Docker",
+    "description": "Containerization platform",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/*.rpm"
+        },
+        {
+            "type": "shell",
+            "command": "systemctl enable --now docker"
+        },
+        {
+            "type": "shell",
+            "command": "usermod -aG docker $SUDO_USER || usermod -aG docker $(whoami)"
+        }
+    ],
+    "idempotency_check": "docker --version"
+}

@@ -1,0 +1,21 @@
+{
+    "name": "Ansible",
+    "description": "Configuration management and automation",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y epel-release"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} ansible"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/*.rpm"
+        }
+    ],
+    "idempotency_check": "ansible --version"
+}

@@ -1,0 +1,24 @@
+{
+    "name": "Jenkins",
+    "description": "Open-source automation server for CI/CD",
+    "installation_steps": {
+        "pre_commands": [
+            "apt-get update",
+            "apt-get install -y openjdk-11-jre",
+            "curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | gpg --dearmor -o /usr/share/keyrings/jenkins-keyring.gpg"
+        ],
+        "main_commands": [
+            "echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/ | tee /etc/apt/sources.list.d/jenkins.list > /dev/null",
+            "apt-get update",
+            "apt-get install -y jenkins"
+        ],
+        "post_commands": [
+            "systemctl start jenkins",
+            "systemctl enable jenkins"
+        ],
+        "verification_commands": [
+            "systemctl status jenkins | grep 'active (running)'"
+        ]
+    },
+    "idempotency_check": "systemctl is-active jenkins"
+}

@@ -1,0 +1,21 @@
+{
+    "name": "Helm",
+    "description": "The Kubernetes Package Manager",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
+        },
+        {
+            "type": "shell",
+            "command": "echo 'Helm downloaded via script (binary install). For airgap, manual binary download is preferred but script is used here for simplicity in download phase.'"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "echo 'Helm installed via script in download phase. Ensure binary is in path.'"
+        }
+    ],
+    "idempotency_check": "helm version --client"
+}

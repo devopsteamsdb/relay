@@ -1,0 +1,21 @@
+{
+    "name": "Terraform",
+    "description": "Infrastructure as Code (IaC) tool",
+    "download_steps": [
+        {
+            "type": "shell",
+            "command": "dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo"
+        },
+        {
+            "type": "shell",
+            "command": "dnf install -y --downloadonly --downloaddir={download_dir} terraform"
+        }
+    ],
+    "install_steps": [
+        {
+            "type": "shell",
+            "command": "dnf install -y {download_dir}/*.rpm"
+        }
+    ],
+    "idempotency_check": "terraform -version"
+}

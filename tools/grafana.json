@@ -1,0 +1,25 @@
+{
+    "name": "Grafana",
+    "description": "Open-source platform for monitoring and observability",
+    "installation_steps": {
+        "pre_commands": [
+            "apt-get update",
+            "apt-get install -y apt-transport-https software-properties-common wget",
+            "wget -q -O - https://apt.grafana.com/gpg.key | apt-key add -"
+        ],
+        "main_commands": [
+            "echo \"deb https://apt.grafana.com stable main\" | tee -a /etc/apt/sources.list.d/grafana.list",
+            "apt-get update",
+            "apt-get install -y grafana"
+        ],
+        "post_commands": [
+            "systemctl daemon-reload",
+            "systemctl enable grafana-server",
+            "systemctl start grafana-server"
+        ],
+        "verification_commands": [
+            "systemctl status grafana-server | grep 'active (running)'"
+        ]
+    },
+    "idempotency_check": "systemctl is-active grafana-server"
+}
