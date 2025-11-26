@@ -4,13 +4,13 @@
     "download_steps": [
         {
             "type": "shell",
-            "command": "pip3 download ansible --dest \"{download_dir}\""
+            "command": "python3 -m pip download ansible --dest \"{download_dir}\""
         }
     ],
     "install_steps": [
         {
             "type": "shell",
-            "command": "pip3 install --no-index --find-links=\"{download_dir}\" ansible"
+            "command": "python3 -m pip install --no-index --find-links=\"{download_dir}\" ansible"
         }
     ],
     "idempotency_check": "ansible --version"
