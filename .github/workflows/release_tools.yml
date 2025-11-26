@@ -27,7 +27,7 @@ jobs:
               source /app/venv/bin/activate && \
               python3 -m toolbox.cli --download --all --agree-to-terms && \
               cd downloads && \
-              tree -L 2 > /workspace/CONTENTS.txt && \
+              find . -print > /workspace/CONTENTS.txt && \
               zip -r /workspace/tools_bundle.zip .
             "
 
