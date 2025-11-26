@@ -30,3 +30,7 @@
 ## Usability
 - [x] **Progress Bars**: Use a library like `tqdm` to show progress bars during large file downloads.
 - [ ] **Summary Report**: Generate a summary report (text or HTML) after batch operations (Download All / Install All) listing successful and failed items.
+
+## Recommended Tools
+- [ ] **HashiCorp Vault**: Industry standard for secrets management, encryption, and certificates. Airgap-friendly single binary.
+- [ ] **k9s**: Terminal-based UI for Kubernetes clusters. Makes managing clusters significantly faster and easier.
