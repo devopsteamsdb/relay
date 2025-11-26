@@ -8,7 +8,7 @@
         },
         {
             "type": "shell",
-            "command": "dnf install -y --downloadonly --downloaddir=\"{download_dir}\" kubectl"
+            "command": "dnf install -y --reinstall --downloadonly --downloaddir=\"{download_dir}\" kubectl"
         }
     ],
     "install_steps": [
