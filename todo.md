@@ -24,7 +24,7 @@
 - [ ] **Docstrings**: Ensure all functions and classes have comprehensive docstrings explaining their purpose, arguments, and return values.
 
 ## Testing
-- [ ] **Unit Tests**: Create a `tests/` directory and add unit tests for core logic in `toolbox/cli.py`, `toolbox/utils.py`, and `toolbox/download_collections.py`.
+- [x] **Unit Tests**: Create a `tests/` directory and add unit tests for core logic in `toolbox/cli.py`, `toolbox/utils.py`, and `toolbox/download_collections.py`.
 - [ ] **Integration Tests**: Add integration tests to verify the end-to-end flow (download -> install) using a mock environment or container.
 
 ## Usability
