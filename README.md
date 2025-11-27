@@ -83,18 +83,23 @@ Test the tool without making actual changes:
 sudo venv/bin/python3 -m  toolbox.cli --simulate
 ```
 
+## Testing
+
+- Run all unit tests: `python -m unittest discover -s tests`
+- Last local run: passing (Python 3.x)
+
 ## Project Structure
 
 ```
 relay/
-├── toolbox/           # Main Python package
-│   ├── cli.py        # CLI interface
-│   ├── config.py     # Configuration loader
-│   └── utils.py      # Utility functions
-├── tools/            # Tool configuration files (JSON)
-├── downloads/        # Downloaded packages (created during download phase)
-├── setup.sh          # Setup script
-└── requirements.txt  # Python dependencies
+Γö£ΓöÇΓöÇ toolbox/           # Main Python package
+Γöé   Γö£ΓöÇΓöÇ cli.py        # CLI interface
+Γöé   Γö£ΓöÇΓöÇ config.py     # Configuration loader
+Γöé   ΓööΓöÇΓöÇ utils.py      # Utility functions
+Γö£ΓöÇΓöÇ tools/            # Tool configuration files (JSON)
+Γö£ΓöÇΓöÇ downloads/        # Downloaded packages (created during download phase)
+Γö£ΓöÇΓöÇ setup.sh          # Setup script
+ΓööΓöÇΓöÇ requirements.txt  # Python dependencies
 ```
 
 ## Adding New Tools
