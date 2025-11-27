@@ -25,7 +25,7 @@
 
 ## Testing
 - [x] **Unit Tests**: Create a `tests/` directory and add unit tests for core logic in `toolbox/cli.py`, `toolbox/utils.py`, and `toolbox/download_collections.py`.
-- [ ] **Integration Tests**: Add integration tests to verify the end-to-end flow (download -> install) using a mock environment or container.
+- [x] **Integration Tests**: Add integration tests to verify the end-to-end flow (download -> install) using a mock environment or container.
 
 ## Usability
 - [x] **Progress Bars**: Use a library like `tqdm` to show progress bars during large file downloads.
