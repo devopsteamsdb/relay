@@ -29,7 +29,7 @@
 
 ## Usability
 - [x] **Progress Bars**: Use a library like `tqdm` to show progress bars during large file downloads.
-- [ ] **Summary Report**: Generate a summary report (text or HTML) after batch operations (Download All / Install All) listing successful and failed items.
+- [x] **Summary Report**: Generate a summary report (text or HTML) after batch operations (Download All / Install All) listing successful and failed items.
 
 ## Fixes
 - [ ] **fix hardcoded versions**: some tools have hardcoded versions in their configuration files, which should be fetched from the tool's website.

@@ -13,7 +13,7 @@ def execute_command(command: str, description: str = "", simulate: bool = False)
     """
     if description:
         print(f"{Fore.BLUE}Executing: {description}{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}$ {command}{Style.RESET_ALL}")
+    print(f"{Fore.MAGENTA}$ {command}{Style.RESET_ALL}")
 
     if simulate:
         print(f"{Fore.YELLOW}[SIMULATION] Skipping actual command execution.{Style.RESET_ALL}")

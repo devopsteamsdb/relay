@@ -84,7 +84,7 @@ class ToolboxCLI:
                                 
 DevOps Tool Provisioning for Airgapped Environments
         '''
-        print(Fore.CYAN + ascii_art + Style.RESET_ALL)
+        print(Fore.MAGENTA + ascii_art + Style.RESET_ALL)
 
     def show_disclaimer(self):
         clear_screen()
@@ -92,7 +92,7 @@ DevOps Tool Provisioning for Airgapped Environments
         print("This tool performs system-level changes and requires root privileges.")
         print("By using Relay, you agree to take full responsibility for any changes or damages to your system.")
         print("The creators are not liable for any issues that may arise.")
-        print(Fore.CYAN + "Do you agree to these terms? (y/n): " + Style.RESET_ALL, end="")
+        print(Fore.MAGENTA + "Do you agree to these terms? (y/n): " + Style.RESET_ALL, end="")
 
         response = input().strip().lower()
         if response == 'y':
@@ -104,7 +104,7 @@ DevOps Tool Provisioning for Airgapped Environments
     def show_main_menu(self):
         clear_screen()
         self.print_ascii_art()
-        print(Fore.CYAN + "Welcome to Relay - DevOps Tool Provisioning" + Style.RESET_ALL)
+        print(Fore.MAGENTA + "Welcome to Relay - DevOps Tool Provisioning" + Style.RESET_ALL)
         print(f"System detected: {self.system_info['os_version']} | User: {self.system_info['user']} | Python: {self.system_info['python_version']}")
         print("----------------------------------------------------------")
         print(Fore.YELLOW + "Main Menu" + Style.RESET_ALL)
@@ -114,7 +114,7 @@ DevOps Tool Provisioning for Airgapped Environments
         print("3. Check System Requirements")
         print("4. View Installed Tools (during this session)")
         print("q. Quit")
-        print(Fore.CYAN + "Enter your choice: " + Style.RESET_ALL, end="")
+        print(Fore.MAGENTA + "Enter your choice: " + Style.RESET_ALL, end="")
 
     def show_tool_selection_menu(self, action="Install"):
         clear_screen()
@@ -123,9 +123,13 @@ DevOps Tool Provisioning for Airgapped Environments
 
         for i, tool in enumerate(self.tools_config, 1):
             status_parts = []
-            if tool['name'] in self.installed_tools:
+            is_installed = tool['name'] in self.installed_tools
+            is_downloaded = tool['name'] in self.downloaded_tools
+
+            if is_installed:
                 status_parts.append(f"{Fore.GREEN}[INSTALLED]{Style.RESET_ALL}")
-            if tool['name'] in self.downloaded_tools:
+            # Only show downloaded state when not installed
+            if is_downloaded and not is_installed:
                 status_parts.append(f"{Fore.YELLOW}[DOWNLOADED]{Style.RESET_ALL}")
             
             status = " ".join(status_parts) if status_parts else ""
@@ -134,7 +138,7 @@ DevOps Tool Provisioning for Airgapped Environments
         print("a. All")
         print("b. Back to Main Menu")
         print("q. Quit")
-        print(f"{Fore.CYAN}Select a tool to {action.lower()} by number, or multiple (e.g., 1,3,4): {Style.RESET_ALL}", end="")
+        print(f"{Fore.MAGENTA}Select a tool to {action.lower()} by number, or multiple (e.g., 1,3,4): {Style.RESET_ALL}", end="")
         if self.simulation_mode:
             print(f" {Fore.YELLOW}[SIMULATION MODE]{Style.RESET_ALL}")
         else:
@@ -198,7 +202,7 @@ DevOps Tool Provisioning for Airgapped Environments
         if not self.simulation_mode and tool['name'] not in self.downloaded_tools:
             print(f"\n{Fore.RED}ERROR: {tool['name']} has not been downloaded yet.{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}Please run download mode first to fetch this tool.{Style.RESET_ALL}")
-            input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.MAGENTA}Press Enter to continue...{Style.RESET_ALL}")
             return False
 
         print(f"\n{Fore.YELLOW}Initiating installation for: {tool['name']}{Style.RESET_ALL}")
@@ -232,7 +236,7 @@ DevOps Tool Provisioning for Airgapped Environments
         else:
             print(f"{Fore.RED}[FAILED] {tool['name']} installation failed.{Style.RESET_ALL}")
 
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.MAGENTA}Press Enter to continue...{Style.RESET_ALL}")
         return success
 
 
@@ -277,7 +281,7 @@ DevOps Tool Provisioning for Airgapped Environments
         else:
             print(f"\n{Fore.RED}Some critical system requirements are NOT met. Please review the above.{Style.RESET_ALL}")
 
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.MAGENTA}Press Enter to continue...{Style.RESET_ALL}")
 
     def show_installed_tools(self):
         clear_screen()
@@ -293,7 +297,7 @@ DevOps Tool Provisioning for Airgapped Environments
         else:
             print(f"{Fore.YELLOW}No tools installed yet in this session, and no pre-existing tools detected.{Style.RESET_ALL}")
 
-        input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.MAGENTA}Press Enter to continue...{Style.RESET_ALL}")
 
     def run(self):
         # Check for --simulate argument
@@ -350,7 +354,7 @@ DevOps Tool Provisioning for Airgapped Environments
             elif choice == '4':
                 self.show_installed_tools()
             elif choice.lower() == 'q':
-                print(f"{Fore.CYAN}Exiting Relay. Goodbye!{Style.RESET_ALL}")
+                print(f"{Fore.MAGENTA}Exiting Relay. Goodbye!{Style.RESET_ALL}")
                 break
             else:
                 print(f"{Fore.RED}Invalid choice. Please try again.{Style.RESET_ALL}")
@@ -358,13 +362,23 @@ DevOps Tool Provisioning for Airgapped Environments
 
     def _process_all_tools(self, action):
         """Helper to process all tools without user interaction"""
-        print(f"{Fore.CYAN}Processing ALL tools for {action}...{Style.RESET_ALL}")
+        print(f"{Fore.MAGENTA}Processing ALL tools for {action}...{Style.RESET_ALL}")
+        results = []
         for tool in self.tools_config:
             if action == "Download":
-                self.download_tool(tool)
+                ok = self.download_tool(tool)
             elif action == "Install":
-                self.install_tool(tool)
-        print(f"{Fore.GREEN}All tools processed.{Style.RESET_ALL}")
+                ok = self.install_tool(tool)
+            else:
+                ok = False
+            results.append((tool['name'], ok))
+
+        successes = [name for name, ok in results if ok]
+        failures = [name for name, ok in results if not ok]
+
+        print(f"\n{Fore.MAGENTA}Batch Summary ({action}):{Style.RESET_ALL}")
+        print(f"  {Fore.GREEN}Succeeded:{Style.RESET_ALL} {', '.join(successes) if successes else 'None'}")
+        print(f"  {Fore.RED}Failed:{Style.RESET_ALL} {', '.join(failures) if failures else 'None'}")
 
     def _run_tool_selection_loop(self, action):
         while True:
@@ -375,14 +389,14 @@ DevOps Tool Provisioning for Airgapped Environments
                 break
             
             if selection == 'q':
-                print(f"{Fore.CYAN}Exiting Relay. Goodbye!{Style.RESET_ALL}")
+                print(f"{Fore.MAGENTA}Exiting Relay. Goodbye!{Style.RESET_ALL}")
                 sys.exit(0)
             
             if selection == 'a':
                 # Select all tools
                 self._process_all_tools(action=action)
                 
-                input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+                input(f"\n{Fore.MAGENTA}Press Enter to continue...{Style.RESET_ALL}")
                 continue
 
             try:
@@ -401,7 +415,7 @@ DevOps Tool Provisioning for Airgapped Environments
                         elif action == "Install":
                             self.install_tool(tool)
                     
-                    input(f"\n{Fore.CYAN}Press Enter to continue...{Style.RESET_ALL}")
+                    input(f"\n{Fore.MAGENTA}Press Enter to continue...{Style.RESET_ALL}")
                 else:
                     print(f"{Fore.RED}Invalid selection. Please try again.{Style.RESET_ALL}")
                     time.sleep(1)
