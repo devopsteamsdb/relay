@@ -1,5 +1,5 @@
 {
-    "name": "VNC Server",
+    "name": "VNC-Server",
     "description": "TigerVNC server for remote desktop access",
     "download_steps": [
         {
