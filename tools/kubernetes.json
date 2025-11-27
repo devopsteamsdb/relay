@@ -2,6 +2,10 @@
     "name": "Kubernetes_kubectl",
     "description": "CLI for Kubernetes cluster management",
     "version": "{{latest_version}}",
+    "version_source": {
+        "type": "github_release",
+        "repo": "kubernetes/kubernetes"
+    },
     "download_steps": [
         {
             "type": "shell",

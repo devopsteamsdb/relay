@@ -125,15 +125,17 @@ DevOps Tool Provisioning for Airgapped Environments
             status_parts = []
             is_installed = tool['name'] in self.installed_tools
             is_downloaded = tool['name'] in self.downloaded_tools
+            version = tool.get("version")
 
             if is_installed:
                 status_parts.append(f"{Fore.GREEN}[INSTALLED]{Style.RESET_ALL}")
             # Only show downloaded state when not installed
             if is_downloaded and not is_installed:
                 status_parts.append(f"{Fore.YELLOW}[DOWNLOADED]{Style.RESET_ALL}")
-            
+
             status = " ".join(status_parts) if status_parts else ""
-            print(f"{i}. {tool['name']} - {tool['description']} {status}")
+            version_text = f" (v{version})" if version else ""
+            print(f"{i}. {tool['name']} - {tool['description']}{version_text} {status}")
 
         print("a. All")
         print("b. Back to Main Menu")
@@ -179,6 +181,8 @@ DevOps Tool Provisioning for Airgapped Environments
                 
                 # Simple variable substitution
                 cmd = cmd.replace("{download_dir}", tool_download_dir)
+                if tool.get("version"):
+                    cmd = cmd.replace("{version}", tool["version"])
                 
                 if not execute_command(cmd, description=f"Downloading {tool['name']}", simulate=self.simulation_mode):
                     success = False
@@ -226,6 +230,8 @@ DevOps Tool Provisioning for Airgapped Environments
             cmd = step.get('command')
             if cmd:
                 cmd = cmd.replace("{download_dir}", tool_download_dir)
+                if tool.get("version"):
+                    cmd = cmd.replace("{version}", tool["version"])
                 if not execute_command(cmd, description=f"Installing {tool['name']}", simulate=self.simulation_mode):
                     success = False
                     break

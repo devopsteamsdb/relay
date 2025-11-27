@@ -32,7 +32,7 @@
 - [x] **Summary Report**: Generate a summary report (text or HTML) after batch operations (Download All / Install All) listing successful and failed items.
 
 ## Fixes
-- [ ] **fix hardcoded versions**: some tools have hardcoded versions in their configuration files, which should be fetched from the tool's website.
+- [x] **fix hardcoded versions**: some tools have hardcoded versions in their configuration files, which should be fetched from the tool's website.
 - [ ] **fix grafana download**: https://rpm.grafana.com/grafana.repo is not available (404)
 
 ## Recommended Tools
